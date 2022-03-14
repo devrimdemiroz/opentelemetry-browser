@@ -1,6 +1,8 @@
-# selenium chrome devtools blues
+# opentelemetry browser
 
-## The kubic way
+A traced chrome browser via Selenium Chrome Devtools reporting traces via grafana agent with otlp...
+
+## Quick start ( The kubic way )
 
 ### Install chromedriver
 Install chromedriver locally according to your browser version https://chromedriver.chromium.org/downloads

@@ -1,6 +1,6 @@
 # selenium chrome devtools blues
 
-## usage the kubic way
+## The kubic way
 
 ### Install chromedriver
 Install chromedriver locally according to your browser version https://chromedriver.chromium.org/downloads

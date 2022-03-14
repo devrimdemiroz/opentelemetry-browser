@@ -46,8 +46,8 @@
                         -Dotel.instrumentation.experimental.outgoing-span-suppression-by-type=true
                         -Dotel.instrumentation.opentelemetry-annotations.enabled=true
                         -Dotel.javaagent.debug=false
-                        <!--                        -Dotel.exporter.otlp.endpoint=http://grafana-agent-traces.default.svc.cluster.local:4317-->
-                        -Dotel.exporter.otlp.endpoint=http://localhost:4317
+                        -Dotel.exporter.otlp.endpoint=http://grafana-agent-traces.default.svc.cluster.local:4317
+<!--                        -Dotel.exporter.otlp.endpoint=http://localhost:4317-->
                         -Dotel.trace.exporter=otlp
                         -Dotel.propagators=tracecontext
                         -Dotel.resource.attributes=service.name=spring-auto
@@ -76,6 +76,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark</artifactId>
+            <version>0.17.2</version>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>

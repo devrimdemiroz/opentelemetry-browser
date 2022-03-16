@@ -5,12 +5,14 @@ import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 import io.opentelemetry.context.propagation.TextMapSetter;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.devtools.NetworkInterceptor;
 import org.openqa.selenium.remote.http.Filter;
 import org.openqa.selenium.remote.http.HttpRequest;
 import org.openqa.selenium.remote.http.HttpResponse;
 
+@Slf4j
 public class Cdp {
     private static final TextMapSetter<HttpRequest> setter = new TextMapSetter<HttpRequest>() {
         @Override
@@ -19,21 +21,28 @@ public class Cdp {
             carrier.addHeader(key, value);
         }
     };
-    private static final String urlSkipRegex = ".*\\.ico$";
+    private static final String urlSkipRegex = ".*\\.ico$" +
+            "||.*\\.js$";
     public static ChromeDriver chromeDriver;
+    private static NetworkInterceptor networkInterceptor;
 
 
-    public static void initDriverAndDevTools() {
+    public static void initDriver() {
 
         chromeDriver = new ChromeDriver();
-        startIntercepting();
 
     }
 
-    private static void startIntercepting() {
-        NetworkInterceptor networkInterceptor = new NetworkInterceptor(
+    public static void startIntercepting() {
+        log.info("startIntercepting");
+        networkInterceptor = new NetworkInterceptor(
                 chromeDriver,
                 headerFilter());
+    }
+
+    public static void stopIntercepting() {
+        log.info("stopIntercepting");
+        networkInterceptor.close();
     }
 
     private static Filter headerFilter() {
@@ -45,6 +54,7 @@ public class Cdp {
             HttpResponse res = null;
             try (Scope unused = span.makeCurrent()) {
                 Tracing.propagator.inject(Context.current(), req,setter);
+                System.out.println(req.getUri());
                 res = next.execute(req);
             } catch (Exception e) {
                 span.recordException(e);

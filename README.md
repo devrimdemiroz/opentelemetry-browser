@@ -32,6 +32,20 @@ kubectl port-forward svc/grafana-agent-traces --address=0.0.0.0 8889:8889 &
 kubectl port-forward svc/grafana-agent-traces 8080:8080
 
 ```
+### Download java agent
+```shell
+wget https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar
+```
+
+```shell
+mvn build
+./mvnw spring-boot:run
+```
+
+
+
+
+
 
 #### alternative grafana agent operator
   - Partially Follow https://grafana.com/docs/agent/latest/operator/getting-started/ 
@@ -43,10 +57,4 @@ kubectl port-forward svc/grafana-agent-traces 8080:8080
   ```shell
   go run ./cmd/agent-operator
   ```
-  - 
-  ### Download java agent
-  ```shell
-wget https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar
-```
-  - ```mvn build```
   - 

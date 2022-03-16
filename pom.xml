@@ -50,7 +50,7 @@
 <!--                        -Dotel.exporter.otlp.endpoint=http://localhost:4317-->
                         -Dotel.trace.exporter=otlp
                         -Dotel.propagators=tracecontext
-                        -Dotel.resource.attributes=service.name=spring-auto
+                        -Dotel.resource.attributes=service.name=browser
                         <!--METRICS CONFIG-->
                         -Dotel.metrics.exporter=none
                         <!--                        -Dotel.metrics.exporter=otlp-->
@@ -147,6 +147,16 @@
             <artifactId>lombok</artifactId>
             <version>1.18.22</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xbean</groupId>
+            <artifactId>xbean-reflect</artifactId>
+            <version>3.4</version>
         </dependency>
     </dependencies>
 

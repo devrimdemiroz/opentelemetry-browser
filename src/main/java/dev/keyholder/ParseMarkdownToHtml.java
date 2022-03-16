@@ -1,14 +1,18 @@
 package dev.keyholder;
 
+import org.apache.commons.lang.text.StrSubstitutor;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
+import org.springframework.core.env.Environment;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ParseMarkdownToHtml {
     public static void main(String... args) {
@@ -17,7 +21,7 @@ public class ParseMarkdownToHtml {
                 + "### heading h3\n"
                 + "#### heading h4\n"
                 + "---";
-        String htmlValue = convertMarkdownFileToHTML("README.md");
+        String htmlValue = convertMarkdownFileToHTML("README.md", null);
         //String htmlValue = convertMarkdownToHTML(markdownValue);
 
         System.out.println("Markdown String:");
@@ -33,7 +37,9 @@ public class ParseMarkdownToHtml {
         HtmlRenderer htmlRenderer = HtmlRenderer.builder().build();
         return htmlRenderer.render(document);
     }
-    public static String convertMarkdownFileToHTML(String markdown) {
+
+
+    public static String convertMarkdownFileToHTML(String markdown, Environment env) {
         Parser parser = Parser.builder().build();
 
         Node document=null;
@@ -48,6 +54,11 @@ public class ParseMarkdownToHtml {
             e.printStackTrace();
         }
         HtmlRenderer htmlRenderer = HtmlRenderer.builder().build();
-        return htmlRenderer.render(document);
+        Map valuesMap = new HashMap();
+        valuesMap.put("tracing.ui.url", env.getProperty("tracing.ui.url"));
+        String templateString = htmlRenderer.render(document);
+        StrSubstitutor sub = new StrSubstitutor(valuesMap);
+        String resolvedString = sub.replace(templateString);
+        return resolvedString;
     }
 }

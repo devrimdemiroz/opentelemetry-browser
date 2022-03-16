@@ -26,20 +26,22 @@ public class Tracing {
     public static Span createRootSpan(String spanName)  {
 
         SpanBuilder spanBuilder = Tracing.getTracer().spanBuilder(spanName);
-        log.info(String.valueOf("Setting root!"));
+        log.info("Setting root="+spanName);
         spanBuilder.setNoParent();
         rootSpan = spanBuilder
                 .setSpanKind(SpanKind.CLIENT)
                 .setAttribute("env", "local")
                 .startSpan();
-        log.debug(String.valueOf("root span=" + rootSpan.toString()));
+        log.info("root span=" + rootSpan.toString());
 
         return rootSpan;
     }
 
 
     public static boolean endRootSpan() {
+
         if (rootSpan != null) {
+            log.debug("endRootSpan="+rootSpan.toString());
             rootSpan.end();
             rootSpan = null;
             return true;

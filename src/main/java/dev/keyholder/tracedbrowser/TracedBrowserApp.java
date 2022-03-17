@@ -16,16 +16,16 @@ import static dev.keyholder.ParseMarkdownToHtml.convertMarkdownFileToHTML;
 
 @SpringBootApplication
 @RestController
-public class TracedBrowserApplication {
+public class TracedBrowserApp {
 
 	private static ConfigurableApplicationContext ctx;
 
 	@Autowired
-	private  Environment env;
+	public Environment env;
 
 	public static void main(String[] args) throws InterruptedException {
 
-		ctx=SpringApplication.run(TracedBrowserApplication.class, args);
+		ctx=SpringApplication.run(TracedBrowserApp.class, args);
 		TracedBrowser.awake();
 
 	}
@@ -44,7 +44,9 @@ public class TracedBrowserApplication {
 	@GetMapping("/stop")
 	public String stop() {
 		TracedBrowser.stop();
-		return "Stopped";
+
+		return convertMarkdownFileToHTML("cockpit.md",env);
+
 	}
 
 	@GetMapping("/quit")

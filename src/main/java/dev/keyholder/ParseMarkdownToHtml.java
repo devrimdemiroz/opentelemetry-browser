@@ -56,6 +56,12 @@ public class ParseMarkdownToHtml {
         HtmlRenderer htmlRenderer = HtmlRenderer.builder().build();
         Map valuesMap = new HashMap();
         valuesMap.put("tracing.ui.url", env.getProperty("tracing.ui.url"));
+
+        if (Tracing.rootSpan!=null)
+            valuesMap.put("tracing.status", Tracing.rootSpan.toString());
+        else valuesMap.put("tracing.status", "No active tracing");
+
+
         String templateString = htmlRenderer.render(document);
         StrSubstitutor sub = new StrSubstitutor(valuesMap);
         String resolvedString = sub.replace(templateString);

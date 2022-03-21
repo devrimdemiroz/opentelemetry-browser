@@ -1,8 +1,10 @@
 # opentelemetry browser
 
-A traced chrome browser via Selenium Chrome Devtools reporting traces via grafana agent with otlp...  Own needs and ideas with something almost usable ;)
+A traced chrome browser via Selenium Chrome Devtools reporting traces via grafana agent with otlp...  Own needs and ideas with something just usable ;)
 
 Opens a browser containing instructions how to start/stop a trace. Similar to .har file but on an opentelemetry backend.
+
+It enables a playground for those who are fairly new to tracing as well experts who know the value of http trafic on browser flows as an opentelemetry trace without configuring any instrumentation on top.
 
 ![](opentelemetry-browser-architecture.drawio.png)
 
@@ -12,6 +14,10 @@ Opens a browser containing instructions how to start/stop a trace. Similar to .h
 Install chromedriver locally according to your browser version https://chromedriver.chromium.org/downloads
 Default /usr/local/bin would be for MacOS. In that case run chromedriver executable once to have run permission. 
 Repeat this on each driver update. Remember to download new driver if you upgrade the browser or use an auto managed chromedriver java code ;)
+```shell
+unzip  ~/Downloads/chromedriver_mac64.zip
+cp ~/Downloads/chromedriver  /usr/local/bin/chromedriver
+```
 
 ### Download java agent
 ```shell

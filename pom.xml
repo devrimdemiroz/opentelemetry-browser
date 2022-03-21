@@ -47,15 +47,15 @@
                         -Dotel.instrumentation.opentelemetry-annotations.enabled=true
                         -Dotel.javaagent.debug=false
                         -Dotel.exporter.otlp.endpoint=http://grafana-agent-traces.default.svc.cluster.local:4317
-<!--                        -Dotel.exporter.otlp.endpoint=http://localhost:4317-->
+                        <!-- -Dotel.exporter.otlp.endpoint=http://localhost:4317 -->
                         -Dotel.trace.exporter=otlp
                         -Dotel.propagators=tracecontext
                         -Dotel.resource.attributes=service.name=browser
                         <!--METRICS CONFIG-->
                         -Dotel.metrics.exporter=none
-                        <!--                        -Dotel.metrics.exporter=otlp-->
+                        <!-- -Dotel.metrics.exporter=otlp-->
                         -Dotel.metrics.exemplar.filter=ALL
-                        -Dotel.exporter.otlp.metrics.endpoint=http://grafana-agent-traces.default.svc.cluster.local:8080
+                        -Dotel.exporter.otlp.metrics.endpoint=http://grafana-agent-traces.default.svc.cluster.local:12345
                     </jvmArguments>
                 </configuration>
             </plugin>

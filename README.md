@@ -2,6 +2,7 @@
 
 A traced chrome browser via Selenium Chrome Devtools reporting traces via grafana agent with otlp...  Own needs and ideas with something almost usable ;)
 
+![](opentelemetry-browser-architecture.drawio.png)
 ## Quick start 
 
 ### Install chromedriver

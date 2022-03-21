@@ -2,7 +2,10 @@
 
 A traced chrome browser via Selenium Chrome Devtools reporting traces via grafana agent with otlp...  Own needs and ideas with something almost usable ;)
 
+Opens a browser containing instructions how to start/stop a trace. Similar to .har file but on an opentelemetry backend.
+
 ![](opentelemetry-browser-architecture.drawio.png)
+
 ## Quick start 
 
 ### Install chromedriver
@@ -28,7 +31,7 @@ wget https://github.com/open-telemetry/opentelemetry-java-instrumentation/releas
 mvn build
 ./mvnw spring-boot:run
 ```
-Opens a browser containing instructions how to start/stop a trace
+Should opens a browser containing instructions how to start/stop a tracing.
 
 ---
 ## Long start ( The kubic way )

@@ -40,7 +40,7 @@ mvn build
 Should opens a browser containing instructions how to start/stop a tracing.
 
 ---
-## Long start ( The kubic way )
+## Slow start ( kubic way )
 
 This section defines installing a grafana agent in local k8s to use as "opentelemetry collector" endpoint. 
 

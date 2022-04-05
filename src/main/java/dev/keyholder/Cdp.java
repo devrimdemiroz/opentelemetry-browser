@@ -1,5 +1,6 @@
 package dev.keyholder;
 
+import dev.keyholder.tracedbrowser.TracedBrowserApp;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.context.Context;
@@ -11,9 +12,11 @@ import org.openqa.selenium.devtools.NetworkInterceptor;
 import org.openqa.selenium.remote.http.Filter;
 import org.openqa.selenium.remote.http.HttpRequest;
 import org.openqa.selenium.remote.http.HttpResponse;
+import org.springframework.core.env.Environment;
 
 @Slf4j
 public class Cdp {
+
     private static final TextMapSetter<HttpRequest> setter = new TextMapSetter<HttpRequest>() {
         @Override
         public void set(HttpRequest carrier, String key, String value) {
@@ -21,8 +24,10 @@ public class Cdp {
             carrier.addHeader(key, value);
         }
     };
-    private static final String urlSkipRegex = ".*\\.ico$" +
-            "||.*\\.js$";
+
+    public static Environment env=TracedBrowserApp.ctx.getEnvironment();
+    private static final String URL_FILTER_REGEX = env.getProperty("url.filter.regex");
+
     public static ChromeDriver chromeDriver;
     private static NetworkInterceptor networkInterceptor;
 
@@ -48,13 +53,13 @@ public class Cdp {
     private static Filter headerFilter() {
 
         Filter filter = next -> req -> {
-            if (req.getUri().matches(urlSkipRegex))
+            if (req.getUri().matches(URL_FILTER_REGEX))
                 return next.execute(req);
             Span span =Tracing.startSpan_Url(req.getUri());
             HttpResponse res = null;
             try (Scope unused = span.makeCurrent()) {
                 Tracing.propagator.inject(Context.current(), req,setter);
-                System.out.println(req.getUri());
+                log.debug(req.getUri());
                 res = next.execute(req);
             } catch (Exception e) {
                 span.recordException(e);

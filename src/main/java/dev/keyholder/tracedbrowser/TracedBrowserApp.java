@@ -18,7 +18,7 @@ import static dev.keyholder.ParseMarkdownToHtml.convertMarkdownFileToHTML;
 @RestController
 public class TracedBrowserApp {
 
-	private static ConfigurableApplicationContext ctx;
+	public static ConfigurableApplicationContext ctx;
 
 	@Autowired
 	public Environment env;

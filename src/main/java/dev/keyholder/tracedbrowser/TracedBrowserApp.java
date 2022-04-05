@@ -31,21 +31,21 @@ public class TracedBrowserApp {
 	}
 	@GetMapping("/hello")
 	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-		return convertMarkdownFileToHTML("cockpit.md",env);
+		return convertMarkdownFileToHTML("docs/cockpit.md");
 	}
 
 	@GetMapping("/start")
 	public String start() {
 		Span span=TracedBrowser.start();
 
-		return span.toString();
+		return convertMarkdownFileToHTML("docs/start.md");
 	}
 
 	@GetMapping("/stop")
 	public String stop() {
 		TracedBrowser.stop();
 
-		return convertMarkdownFileToHTML("cockpit.md",env);
+		return convertMarkdownFileToHTML("docs/cockpit.md");
 
 	}
 

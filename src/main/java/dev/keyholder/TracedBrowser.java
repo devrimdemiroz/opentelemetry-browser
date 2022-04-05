@@ -1,20 +1,20 @@
 package dev.keyholder;
 
+import dev.keyholder.tracedbrowser.TracedBrowserApp;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.context.Scope;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 
 import java.util.concurrent.TimeUnit;
 @Slf4j
 public class TracedBrowser {
-    public static void main(String[] args) throws InterruptedException {
-        awake();
-    }
 
-    public static void awake() throws InterruptedException {
+    static Environment env= TracedBrowserApp.ctx.getEnvironment();
+    public static void awake()  {
         Cdp.initDriver();
-            Cdp.chromeDriver.get("http://localhost:8080/hello");
+            Cdp.chromeDriver.get("http://localhost:"+env.getProperty("server.port")+"/hello");
             log.info("app started");
 
     }

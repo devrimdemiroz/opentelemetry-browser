@@ -1,5 +1,6 @@
 package dev.keyholder;
 
+import dev.keyholder.tracedbrowser.TracedBrowserApp;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
@@ -15,21 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ParseMarkdownToHtml {
-    public static void main(String... args) {
-        String markdownValue = "# heading h1\n"
-                + "## heading h2\n"
-                + "### heading h3\n"
-                + "#### heading h4\n"
-                + "---";
-        String htmlValue = convertMarkdownFileToHTML("README.md", null);
-        //String htmlValue = convertMarkdownToHTML(markdownValue);
-
-        System.out.println("Markdown String:");
-        System.out.println(markdownValue);
-        System.out.println("HTML String:");
-        System.out.println(htmlValue);
-
-    }
 
     public static String convertMarkdownToHTML(String markdown) {
         Parser parser = Parser.builder().build();
@@ -38,8 +24,8 @@ public class ParseMarkdownToHtml {
         return htmlRenderer.render(document);
     }
 
-
-    public static String convertMarkdownFileToHTML(String markdown, Environment env) {
+    static Environment env= TracedBrowserApp.ctx.getEnvironment();
+    public static String convertMarkdownFileToHTML(String markdown) {
         Parser parser = Parser.builder().build();
 
         Node document=null;
@@ -54,8 +40,10 @@ public class ParseMarkdownToHtml {
             e.printStackTrace();
         }
         HtmlRenderer htmlRenderer = HtmlRenderer.builder().build();
+
         Map valuesMap = new HashMap();
         valuesMap.put("tracing.ui.url", env.getProperty("tracing.ui.url"));
+        valuesMap.put("server.port", env.getProperty("server.port"));
 
         if (Tracing.rootSpan!=null)
             valuesMap.put("tracing.status", Tracing.rootSpan.toString());

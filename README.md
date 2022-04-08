@@ -47,6 +47,18 @@ This section defines installing a grafana agent in local k8s to use as "opentele
 - Install docker
 - Install minikube
 
+### Install opentelemetry collector
+```shell
+cd kubernetes/opentelemetry
+# enter your grafana cloud info into yaml 
+echo -n "<your user id>:<your api key>" | base64
+# kubectl apply -f otel-collector.yaml
+envsubst < otel-collector.yaml  | kubectl apply -f - 
+kubectl rollout restart DaemonSet/otel-collector
+kubectl port-forward svc/otel-collector --address=0.0.0.0 4317:4317 &
+```
+
+
 ### Install grafana agent 
 #### grafana agent traces
 ```shell
@@ -54,6 +66,7 @@ kubectl apply -f kubernetes/agent-traces.yaml
 export USERNAME=<grafana cloud username>
 export PASSWORD=<grafana cloud password>
 kubectl apply -f kubernetes/agent-traces-configmap.yaml
+kubectl rollout restart deployment/grafana-agent
 ```
 Reach from local:
 ```shell

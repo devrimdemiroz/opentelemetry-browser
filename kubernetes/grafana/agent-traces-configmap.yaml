@@ -15,7 +15,7 @@ data:
           remote_write:
             - url: https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push
               basic_auth:
-                username: $M_USERNAME
+                username: $M_USER
                 password: $M_PASSWORD
           scrape_configs:
             - job_name: local_scrape
@@ -56,7 +56,7 @@ data:
           remote_write:
             - basic_auth:
                 password: $T_PASSWORD
-                username: $T_USERNAME
+                username: $T_USER
               endpoint: tempo-eu-west-0.grafana.net:443
               retry_on_failure:
                 enabled: false

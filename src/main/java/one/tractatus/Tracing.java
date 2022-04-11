@@ -1,4 +1,4 @@
-package dev.keyholder;
+package one.tractatus;
 
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.trace.*;

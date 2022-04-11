@@ -6,7 +6,7 @@ Opens a browser containing instructions how to start/stop a trace. Similar to .h
 
 It enables a playground for those who are fairly new to tracing as well experts who know the value of http trafic on browser flows as an opentelemetry trace without configuring any instrumentation on top.
 
-![](opentelemetry-browser-architecture.drawio.png)
+![](docs/opentelemetry-browser-architecture.drawio.png)
 
 ## Quick start 
 

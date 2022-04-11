@@ -1,6 +1,6 @@
-package dev.keyholder;
+package one.tractatus;
 
-import dev.keyholder.tracedbrowser.TracedBrowserApp;
+import one.tractatus.tracedbrowser.TracedBrowserApp;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.context.Context;

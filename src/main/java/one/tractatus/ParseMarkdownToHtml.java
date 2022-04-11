@@ -1,6 +1,6 @@
-package dev.keyholder;
+package one.tractatus;
 
-import dev.keyholder.tracedbrowser.TracedBrowserApp;
+import one.tractatus.tracedbrowser.TracedBrowserApp;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;

@@ -8,6 +8,11 @@ It enables a playground for those who are fairly new to tracing as well experts 
 
 ![](docs/opentelemetry-browser-architecture.drawio.png)
 
+## Features
+- Browser opentelemetry tracing without coding
+- opentelemetry and grafana agent k8s deployment examples
+- Spanmetrics processor embedded to collector pushes span metrics to  prometheus
+- Grafana Cloud and AMG/AMP backend integration.  We are hoping to see AMT - Amazon Managed Tempo soon ;)
 ## Quick start 
 
 ### Install chromedriver
@@ -85,17 +90,3 @@ kubectl port-forward svc/grafana-agent-traces 8080:8080
 
 
 
-
-
-
-#### alternative grafana agent operator
-  - Partially Follow https://grafana.com/docs/agent/latest/operator/getting-started/ 
-  - Checkout grafana agent
-  ```shell
-  kubectl apply -f production/operator/crds
-  ```
-  - Install go
-  ```shell
-  go run ./cmd/agent-operator
-  ```
-  - 

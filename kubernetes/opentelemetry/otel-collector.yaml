@@ -30,10 +30,14 @@ data:
       prometheus:
         endpoint: "0.0.0.0:8889"
       prometheusremotewrite:
+        endpoint: "$AWS_AMP_ENDPOINT"
+        auth:
+          authenticator: sigv4auth
+      prometheusremotewrite/1:
         endpoint: "https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push"
         headers:
           authorization: Basic $M_AUTH_BASE64
-
+      
     processors:
       batch:
 
@@ -50,14 +54,17 @@ data:
       health_check:
       pprof:
       zpages:
+      sigv4auth:
+        service: "aps"
+        region: "eu-central-1"
 
     service:
-      extensions: [pprof, zpages, health_check]
+      extensions: [pprof, zpages, health_check,sigv4auth]
       pipelines:
         traces:
           receivers: [otlp]
-          exporters: [otlp]
           processors: [spanmetrics,batch]
+          exporters: [otlp]
 
         metrics/spanmetrics:
           receivers: [otlp/spanmetrics]
@@ -65,7 +72,7 @@ data:
 
         metrics:
           receivers: [prometheus]
-          exporters: [prometheusremotewrite]
+          exporters: [prometheusremotewrite,prometheusremotewrite/1]
           
 ---
 apiVersion: apps/v1
@@ -88,7 +95,15 @@ spec:
     spec:
       containers:
       - name: otel-collector
-        image: otel/opentelemetry-collector-contrib:latest
+        image: otel/opentelemetry-collector-contrib:0.48.0
+        env:
+          - name: AWS_ACCESS_KEY_ID
+            value: "$AWS_ACCESS_KEY_ID"
+          - name: AWS_SECRET_ACCESS_KEY
+            value: "$AWS_SECRET_ACCESS_KEY"
+          - name: AWS_REGION
+            value: "$AWS_REGION"
+
         resources:
           limits:
             cpu: 100m
@@ -103,7 +118,7 @@ spec:
         - mountPath: /var/lib/docker/containers
           name: varlibdockercontainers
           readOnly: true
-        - mountPath: /etc/otel/config.yaml
+        - mountPath: /etc/otelcol-contrib/config.yaml
           name: data
           subPath: config.yaml
           readOnly: true

@@ -55,7 +55,9 @@ echo -n "<your user id>:<your api key>" | base64
 # kubectl apply -f otel-collector.yaml
 envsubst < otel-collector.yaml  | kubectl apply -f - 
 kubectl rollout restart DaemonSet/otel-collector
+ps -ef|grep 4317 |  awk '{print $2}' | xargs kill
 kubectl port-forward svc/otel-collector --address=0.0.0.0 4317:4317 &
+
 ```
 
 

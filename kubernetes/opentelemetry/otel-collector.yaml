@@ -71,7 +71,7 @@ data:
           exporters: [prometheus]
 
         metrics:
-          receivers: [prometheus]
+          receivers: [otlp,prometheus]
           exporters: [prometheusremotewrite,prometheusremotewrite/1]
           
 ---

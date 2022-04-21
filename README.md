@@ -12,6 +12,7 @@ It enables a playground for those who are fairly new to tracing as well experts 
 - Browser opentelemetry tracing without coding
 - opentelemetry and grafana agent k8s deployment examples
 - Spanmetrics processor embedded to collector pushes span metrics to  prometheus
+- Pushes own Spring JVM metrics like disk, cpu, memory etc.
 - Grafana Cloud and AMG/AMP backend integration.  We are hoping to see AMT - Amazon Managed Tempo soon ;)
 ## Quick start 
 

@@ -1,5 +1,7 @@
-package one.tractatus;
+package one.tractatus.tracedbrowser;
 
+import one.tractatus.Cdp;
+import one.tractatus.Tracing;
 import one.tractatus.tracedbrowser.TracedBrowserApp;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.StatusCode;

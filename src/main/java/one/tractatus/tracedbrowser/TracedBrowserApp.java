@@ -1,7 +1,6 @@
 package one.tractatus.tracedbrowser;
 
 import one.tractatus.Cdp;
-import one.tractatus.TracedBrowser;
 import io.opentelemetry.api.trace.Span;
 import one.tractatus.ParseMarkdownToHtml;
 import org.springframework.beans.factory.annotation.Autowired;

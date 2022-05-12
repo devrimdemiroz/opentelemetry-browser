@@ -22,7 +22,7 @@ Default /usr/local/bin would be for MacOS. In that case run chromedriver executa
 Repeat this on each driver update. Remember to download new driver if you upgrade the browser or use an auto managed chromedriver java code ;)
 ```shell
 unzip  ~/Downloads/chromedriver_mac64.zip
-cp ~/Downloads/chromedriver  /usr/local/bin/chromedriver
+cp ~/Downloads/chromedriver  /usr/local/bin/chromedriver51202===
 ```
 
 ### Download java agent

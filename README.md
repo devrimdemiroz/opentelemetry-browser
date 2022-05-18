@@ -22,7 +22,7 @@ Default /usr/local/bin would be for MacOS. In that case run chromedriver executa
 Repeat this on each driver update. Remember to download new driver if you upgrade the browser or use an auto managed chromedriver java code ;)
 ```shell
 unzip  ~/Downloads/chromedriver_mac64.zip
-cp ~/Downloads/chromedriver  /usr/local/bin/chromedriver51202===
+cp ~/Downloads/chromedriver  /usr/local/bin/chromedriver
 ```
 
 ### Download java agent
@@ -48,10 +48,28 @@ Should opens a browser containing instructions how to start/stop a tracing.
 ---
 ## Slow start ( kubic way )
 
-This section defines installing a grafana agent in local k8s to use as "opentelemetry collector" endpoint. 
+This section defines installing a grafana agent in local k8s to use as "opentelemetry collector" endpoint.
 
-- Install docker
-- Install minikube
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+
+```mermaid
+flowchart LR
+
+    subgraph base
+    docker[fa:fa-docker Install docker] --> minikube(Install minikube)
+    end
+
+    subgraph collectors[Install Collector]
+    
+    otelcol( opentelemetry collector)
+    oteloperator( opentelemetry operator)
+     
+    grafanaagent(grafana agent)    
+    end
+
+base-->|or| otelcol & oteloperator & grafanaagent
+
+```
 
 ### Install opentelemetry collector
 ```shell
@@ -62,6 +80,16 @@ echo -n "<your user id>:<your api key>" | base64
 envsubst < otel-collector.yaml  | kubectl apply -f - 
 kubectl rollout restart DaemonSet/otel-collector
 ps -ef|grep 4317 |  awk '{print $2}' | xargs kill
+kubectl port-forward svc/otel-collector --address=0.0.0.0 4317:4317 &
+
+```
+
+### Install opentelemetry operator
+```shell
+cd kubernetes/opentelemetry
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.0/cert-manager.yaml
+kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releases/latest/download/opentelemetry-operator.yaml
+
 kubectl port-forward svc/otel-collector --address=0.0.0.0 4317:4317 &
 
 ```

@@ -6,15 +6,15 @@ classDef green fill:green,stroke:green,stroke-width:2px,color:#fff
 classDef dgreen fill:darkgreen,stroke:green,stroke-width:2px,color:#fff
 subgraph oteloperator["opentelemetry operator"]
             direction LR 
-            agent-crd(fa:fa-file agent-crd):::dgreen
-            collector-crd(fa:fa-file collector-crd) 
+            agent-crd("fa:fa-file agent-crd"):::dgreen
+            collector-crd("fa:fa-file collector-crd") 
          
     end
     subgraph app
         subgraph container
             direction LR 
             application(application)
-            otelagent(fa:fa-check-circle opentelemetry <br/>agent):::dgreen
+            otelagent("fa:fa-check-circle opentelemetry <br/>agent"):::dgreen
         end
         subgraph sidecar
             otelcol-sidecar(collector sidecar)

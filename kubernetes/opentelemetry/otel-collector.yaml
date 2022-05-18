@@ -33,11 +33,11 @@ data:
         endpoint: "$AWS_AMP_ENDPOINT"
         auth:
           authenticator: sigv4auth
-      prometheusremotewrite/1:
+      prometheusremotewrite/grafanacloud:
         endpoint: "https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push"
         headers:
           authorization: Basic $M_AUTH_BASE64
-      
+
     processors:
       batch:
 
@@ -72,7 +72,7 @@ data:
 
         metrics:
           receivers: [otlp,prometheus]
-          exporters: [prometheusremotewrite,prometheusremotewrite/1]
+          exporters: [prometheusremotewrite,prometheusremotewrite/grafanacloud]
           
 ---
 apiVersion: apps/v1

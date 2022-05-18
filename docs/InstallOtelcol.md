@@ -6,8 +6,8 @@ classDef green fill:green,stroke:green,stroke-width:2px,color:#fff
 classDef dgreen fill:darkgreen,stroke:green,stroke-width:2px,color:#fff
 subgraph oteloperator["opentelemetry operator"]
             direction LR 
-            agent-crd(fa:fa-file-code agent-crd):::dgreen
-            collector-crd(fa:fa-file-code collector-crd) 
+            agent-crd(fa:fa-file agent-crd):::dgreen
+            collector-crd(fa:fa-file collector-crd) 
          
     end
     subgraph app

@@ -16,12 +16,13 @@ subgraph oteloperator["opentelemetry operator"]
     end
     subgraph app
         subgraph sidecar
-            otelcol-sidecar(collector sidecar)
+            otelcol-sidecar(collector <br/> sidecar)
         end
         subgraph container
             direction LR 
+            application(application) 
             otelagent("fa:fa-check-circle opentelemetry <br/>agent"):::dgreen
-            application(application)
+            
         end
     end
 
@@ -32,8 +33,10 @@ container o--o sidecar
  collector-crd ---->inject2-->|inject|otelcol-sidecar    
  collector-crd ---->deploy    
             
-otelcol-daemonset( opentelemetry daemonset):::dgreen
-otelcol( opentelemetry collector)
+otelcol-daemonset( opentelemetry <br/> daemonset):::dgreen
+otelcol( opentelemetry <br/>collector)
 deploy -->|deploy| otelcol-daemonset & otelcol
+
+otelagent -->|otlp| otelcol-daemonset
 
 ```

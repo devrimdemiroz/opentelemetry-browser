@@ -5,31 +5,35 @@
 flowchart LR
 classDef green fill:green,stroke:green,stroke-width:2px,color:#fff
 classDef dgreen fill:darkgreen,stroke:green,stroke-width:2px,color:#fff
+agent-crd("fa:fa-file agent-crd"):::dgreen
+collector-crd("fa:fa-file collector-crd"):::dgreen
 subgraph oteloperator["opentelemetry operator"]
-            direction LR 
-            agent-crd("fa:fa-file agent-crd"):::dgreen
-            collector-crd("fa:fa-file collector-crd") 
+            direction LR
+            inject((X)) 
+            inject2((X)) 
+            deploy((X)) 
          
     end
     subgraph app
-        subgraph container
-            direction LR 
-            application(application)
-            otelagent("fa:fa-check-circle opentelemetry <br/>agent"):::dgreen
-        end
         subgraph sidecar
             otelcol-sidecar(collector sidecar)
+        end
+        subgraph container
+            direction LR 
+            otelagent("fa:fa-check-circle opentelemetry <br/>agent"):::dgreen
+            application(application)
         end
     end
 
 container o--o sidecar
    
   
- agent-crd -->|inject|otelagent
- collector-crd ---->|inject|otelcol-sidecar    
+ agent-crd -->inject-->|inject|otelagent
+ collector-crd ---->inject2-->|inject|otelcol-sidecar    
+ collector-crd ---->deploy    
             
 otelcol-daemonset( opentelemetry daemonset):::dgreen
 otelcol( opentelemetry collector)
-oteloperator -->|deploy| otelcol-daemonset & otelcol
+deploy -->|deploy| otelcol-daemonset & otelcol
 
 ```

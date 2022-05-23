@@ -1,0 +1,8 @@
+{
+  "server":{
+    "port":8082
+  },
+  "management.endpoints.web.exposure.include":"metrics, health, prometheus, info",
+  "management.metrics.export.prometheus.enabled": true,
+  "url.filter.regex":".*\\.ico$||.*\\.js\\?.*$||.*\\.ttf\\?.*$||.*\\.woff\\?.*$"
+}

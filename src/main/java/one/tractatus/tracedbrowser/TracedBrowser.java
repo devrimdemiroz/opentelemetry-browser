@@ -15,7 +15,7 @@ public class TracedBrowser {
     static Environment env= TracedBrowserApp.ctx.getEnvironment();
     public static void awake()  {
         Cdp.initDriver();
-            Cdp.chromeDriver.get("http://localhost:"+env.getProperty("server.port")+"/hello");
+            Cdp.chromeDriver.get("http://localhost:"+env.getProperty("server.port")+"/");
             log.info("app started");
 
     }

@@ -13,7 +13,7 @@ import org.openqa.selenium.remote.http.Filter;
 import org.openqa.selenium.remote.http.HttpRequest;
 import org.openqa.selenium.remote.http.HttpResponse;
 import org.springframework.core.env.Environment;
-
+import io.github.bonigarcia.wdm.WebDriverManager;
 @Slf4j
 public class Cdp {
 
@@ -33,7 +33,7 @@ public class Cdp {
 
 
     public static void initDriver() {
-
+        WebDriverManager.chromedriver().setup();
         chromeDriver = new ChromeDriver();
 
     }

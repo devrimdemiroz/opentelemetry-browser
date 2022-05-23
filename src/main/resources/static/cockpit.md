@@ -1,41 +1,54 @@
-# opentelemetry-browser awsome cockpit
+# opentelemetry-browser cockpit
 
 ```mermaid
 flowchart TD
+direction LR
+classDef noteclass fill:#fff5ad,stroke:black,stroke-width:2px,color:#333
+classDef blueclass fill:blue,stroke:blue,stroke-width:2px,color:#fff
+classDef greenclass fill:green,stroke:green,stroke-width:2px,color:#fff
+classDef orangeclass fill:orange,stroke:orange,stroke-width:2px,color:#fff
+classDef redclass fill:red,stroke:red,stroke-width:2px,color:#fff
+subgraph Actions
+direction LR
 
-s2["server.port - {{server.port}}"]
-start
+    subgraph startsg[" "]
+    
+        start(start):::greenclass
+    end
+    
+    subgraph interceptsg[" "]
+    interception[/interception/] o--o
+    tracingstatus[["{{tracing.status}}"]]
+    end
+    
+    subgraph stopsg[" "]
+        stop(stop):::orangeclass
+    end
+    
+    subgraph quitsg[" "]
+        quit(quit):::redclass
+        
+    end
+end
+    
+subgraph descriptionsg[" "]
+ 
+    startdesc[["Start Interception <br/> Opens a new tab <br/> Creates a root span session.<br/> Shows TraceId where <br/> you can later find the traces. "]]:::noteclass
+    quitdesc[["Closes Browser <br/>and Quits application"]]:::noteclass
+    stopdesc[["Stop Interception <br/> Stops the interception on <br/>current root span session <br/> and ends root span."]]:::noteclass
+    otelcoldesc[["Shows auto generated<br/> otelcol architecture <br/>in a new tab"]]:::noteclass
+end
+
+start-->interception-->stop-->quit
+interception-->otelcol(otelcol):::blueclass
+start o-.-o startdesc
+stop o-.-o stopdesc
+quit o-.-o quitdesc
+otelcol o-.-o otelcoldesc
+
 click start "/start" _blank;
+click stop "/stop";
+click quit "/quit";
+click otelcol "/#/GeneratedDiagram.md" _blank;
+
 ```
-## Actions
-
-
-<a href="http://localhost:${server.port}/start" target="_blank">Start Intercept</a>
-
-Opens a new tab and creates a root span session. Shows TraceId where you can later find the traces. 
-
-
-[Stop Intercept](http://localhost:${server.port}/stop)
-
-Stops the interception on current root span session and ends root span.
-
-#### Tracing Status 
-```text
-${tracing.status}
-```
-
-[Quit Browser](http://localhost:${server.port}/quit)
-
----
-## Useful links
-
-[${tracing.ui.url}](${tracing.ui.url})
-
-You can navigate to your favorite tracing.ui.url address defined in application.properties to see the trace collected between start and stop interception.
-
-#### spanmetrics endpoint
-<a href="http://grafana-agent-traces.default.svc.cluster.local:8889/metrics" target="_blank">grafana-agent-traces.default.svc.cluster.local:8889/metrics</a>
-
-
-
-

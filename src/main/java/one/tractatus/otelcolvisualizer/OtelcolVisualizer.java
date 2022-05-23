@@ -23,7 +23,7 @@ public class OtelcolVisualizer {
 
     private static void generateDiagram() throws IOException {
 
-        File file = new File("docs/GeneratedDiagram.md");
+        File file = new File("src/main/resources/static/GeneratedDiagram.md");
         FileWriter fw = new FileWriter(file);
         bw = new BufferedWriter(fw);
         bw.write("```mermaid"); bw.newLine();

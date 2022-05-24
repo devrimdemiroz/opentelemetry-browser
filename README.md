@@ -16,15 +16,6 @@ It enables a playground for those who are fairly new to tracing as well experts 
 - Grafana Cloud and AMG/AMP backend integration.  We are hoping to see AMT - Amazon Managed Tempo soon ;)
 ## Quick start 
 
-### Install chromedriver
-Install chromedriver locally according to your browser version https://chromedriver.chromium.org/downloads
-Default /usr/local/bin would be for MacOS. In that case run chromedriver executable once to have run permission. 
-Repeat this on each driver update. Remember to download new driver if you upgrade the browser or use an auto managed chromedriver java code ;)
-```shell
-unzip  ~/Downloads/chromedriver_mac64.zip
-cp ~/Downloads/chromedriver  /usr/local/bin/chromedriver
-```
-
 ### Download java agent
 ```shell
 wget https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar
@@ -88,9 +79,7 @@ kubectl port-forward svc/otel-collector --address=0.0.0.0 4317:4317 &
 ```shell
 cd kubernetes/opentelemetry
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.0/cert-manager.yaml
-kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releases/latest/download/opentelemetry-operator.yaml
-
-kubectl port-forward svc/otel-collector --address=0.0.0.0 4317:4317 &
+kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releases/latest/download/opentelemet
 
 ```
 

@@ -43,23 +43,21 @@ public class TracedBrowserApp {
 		System.out.println("application.json");
 		return IOUtils.toByteArray(in);
 	}
-	@GetMapping("/hello")
-	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-		return ParseMarkdownToHtml.convertMarkdownFileToHTML("docs/cockpit.md");
-	}
 
 	@GetMapping("/start")
 	public String start() {
 		Span span=TracedBrowser.start();
 
-		return ParseMarkdownToHtml.convertMarkdownFileToHTML("docs/start.md");
+		return "Navigate to your adress for example https://devrimdemiroz.github.io/\n" +
+				"\n" +
+				"<--- Return back to original tab and click stop when don";
 	}
 
 	@GetMapping("/stop")
 	public String stop() {
 		TracedBrowser.stop();
 
-		return ParseMarkdownToHtml.convertMarkdownFileToHTML("docs/cockpit.md");
+		return "STOPPED";
 
 	}
 

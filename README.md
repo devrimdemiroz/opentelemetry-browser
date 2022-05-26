@@ -41,21 +41,19 @@ Should opens a browser containing instructions how to start/stop a tracing.
 
 This section defines installing a grafana agent in local k8s to use as "opentelemetry collector" endpoint.
 
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
-
 ```mermaid
 flowchart LR
-
+classDef dgreen fill:darkgreen,stroke:green,stroke-width:2px,color:#fff
     subgraph base
     docker[fa:fa-docker Install docker] --> minikube(Install minikube)
     end
 
     subgraph collectors[Install Collector]
     
-    otelcol( opentelemetry collector)
+    otelcol( opentelemetry collector):::dgreen
     oteloperator( opentelemetry operator)
      
-    grafanaagent(grafana agent)    
+    grafanaagent(grafana agent):::dgreen
     end
 
 base-->|or| otelcol & oteloperator & grafanaagent
@@ -76,6 +74,7 @@ kubectl port-forward svc/otel-collector --address=0.0.0.0 4317:4317 &
 ```
 
 ### Install opentelemetry operator
+Not ready as otelcol contrib is usage with operator is unclear  
 ```shell
 cd kubernetes/opentelemetry
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.0/cert-manager.yaml

@@ -5,15 +5,21 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import java.io.*;
 import java.util.Iterator;
-
+import static one.tractatus.otelcolvisualizer.MermaidFormatter.*;
 
 public class OtelcolVisualizer {
 
     private static JsonNode pipelines;
-    private static int seq;
-    private static int cseq;
     private static BufferedWriter bw;
     private static String pipeLineEnd="";
+    private static JsonNode collectoryConfig=null;
+    private static String exporterNodes ="";
+    private static String receiverNodes="";
+    private static String receiversPipe ="";
+    private static String links ="";
+    private static String exportersPipe;
+    private static String processorsPipe;
+    private static String pipes;
 
     public static void main(String[] args) throws IOException {
         readConfig();
@@ -26,50 +32,71 @@ public class OtelcolVisualizer {
         File file = new File("src/main/resources/static/GeneratedDiagram.md");
         FileWriter fw = new FileWriter(file);
         bw = new BufferedWriter(fw);
-        bw.write("```mermaid"); bw.newLine();
-        bw.write("flowchart TD");        bw.newLine();
+        bw.write("```mermaid \n");
+        bw.write("flowchart LR\n");
         bw.write("classDef tclass fill:orange,stroke:orange,stroke-width:2px,color:#fff");        bw.newLine();
         bw.write("classDef mclass fill:blue,stroke:blue,stroke-width:2px,color:#fff");        bw.newLine();
-        bw.write("subgraph otelcol");        bw.newLine();
-        bw.write("direction LR");        bw.newLine();
+        processPipelines();
+
+        bw.write("subgraph receiverNodes[\" \"]\n");
+        bw.write("direction LR\n");
+        bw.write(receiverNodes+"\n");
+        bw.write("end\n");
+
+        bw.write("subgraph otelcol\n");
+        bw.write("direction LR\n");
+        bw.write("  "+ pipes +"\n");
+
+        bw.write("end\n");
+        bw.write("subgraph exporterNodes[\" \"]\n");
+        bw.write("direction LR\n");
+        bw.write(exporterNodes +"\n");
+        bw.write("end\n");
 
 
-        addPipelines(bw);
-        bw.write("end");
-        bw.newLine();
+
+        // append links last as format is dependent on link sequence
+        bw.write( links +"\n");
         bw.write("```");
         bw.close();
 
 
     }
 
-    private static void addPipelines(BufferedWriter bw) throws IOException {
+    private static void processPipelines() throws IOException {
+        pipelines = collectoryConfig.findValue("pipelines");
+        System.out.println("Processing pipelines yaml section of config: \n " + pipelines.toString());
+        pipes="";
         for (Iterator<String> it = pipelines.fieldNames(); it.hasNext(); ) {
             String pipeName = it.next();
-            System.out.println("    pipeName="+pipeName);
-            bw.write("  subgraph pipeline_"+pipeName);bw.newLine();
-            bw.write("  direction LR\n");
+            pipes+="  subgraph pipeline_"+pipeName+"\n";
+            pipes+="  direction LR\n";
             JsonNode pipeline = pipelines.get(pipeName);
-            addPipeline(pipeName,pipeline, bw);
+            pipes+=addPipeline(pipeName,pipeline);
 
             // to end ("subgraph pipeline_"+pipeName)
-            bw.write("  end\n");
+            pipes+="  end\n\n";
         }
+
     }
 
-    private static void addPipeline(String pipeName, JsonNode pipeline, BufferedWriter bw) throws IOException {
+    private static String addPipeline(String pipeName, JsonNode pipeline) throws IOException {
+        String pipe = "";
         String receivers = addReceivers(pipeName, pipeline.get("receivers"));
+        pipe+=receiversPipe;
         String processors = addProcessors(pipeName, pipeline.get("processors"));
+        pipe+=processorsPipe;
         String exporters = addExporters(pipeName, pipeline.get("exporters"));
-        String connections="";
-        connections+=receivers+"----->";
-        cseq++;
+        pipe+=exportersPipe;
+
         if (processors!=null) {
-            connections+=processors+"----->";
-            cseq++;
+            addLink(receivers,processors,null,null);
+            addLink(processors,exporters,null,null);
+        } else {
+            addLink(receivers,exporters,null,null);
         }
-        connections+=exporters;
-        bw.write("  "+connections+"\n");
+        return pipe;
+
     }
 
 
@@ -78,73 +105,76 @@ public class OtelcolVisualizer {
         if (processors==null) return null;
 
         String name = "processors_" + pipeName;
-        bw.write("      subgraph " + name + "\n");
-        bw.write("      direction LR\n");
+        processorsPipe="";
+        processorsPipe+="      subgraph " + name + "\n";
+        processorsPipe+="      direction LR\n";
         for (JsonNode processor : processors) {
-            bw.write("          "+processor.asText() + seq++ + "[["+processor.asText()+"]]\n");
+            processorsPipe+="          "+processor.asText() + nodeSequence++ + "[["+processor.asText()+"]]\n";
         }
-        bw.write("      end\n");
+        processorsPipe+="      end\n\n";
         return name;
     }
 
     private static String addExporters(String pipeName, JsonNode exporters) throws IOException {
         String name = "exporters_" + pipeName;
-        bw.write("      subgraph " + name + "\n");
-        bw.write("      direction LR\n");
-        String p0 = null;String p1 = null;String p2 = null;
-        String connections="";
+        exportersPipe ="";
+        exportersPipe +="      subgraph " + name + "\n";
+        exportersPipe +="      direction LR\n";
+        String textOnLink = null;String nodeA = null;String nodeB = null;
         for (JsonNode exporter : exporters) {
-            System.out.println("---" + exporter.asText());
-            p0 = exporter.asText();
-            p1 = getFormatted(pipeName, exporter);
-            p2 = getFormatted(pipeName, exporter);
-            bw.write("          "+p2+"\n");
-            connections += p2 + "-->|" + p0 + "|" + p1+"\n";
-            connections += "        linkStyle "+ cseq++ + getFormatted(pipeName);
+            textOnLink = exporter.asText();
+            nodeA = newNodeId(exporter);
+            nodeB = newNodeId(exporter);
+            String endpoint = collectoryConfig.path("exporters").get(textOnLink).path("endpoint").asText();
+            System.out.println(endpoint);
+            exporterNodes+="          subgraph "+nodeA+"_sg["+endpoint+"]\n";
+            exporterNodes+="          direction LR\n";
+            exporterNodes +="          "+formatNode(pipeName, nodeA)+"\n";
+            exporterNodes +="         end\n\n";
+
+            exportersPipe +="          "+formatNode(pipeName, nodeB)+"\n";
+            addLink(nodeB,nodeA,textOnLink,pipeName);
+
         }
-        bw.write("      end\n");
-        bw.write("      "+connections);
+        exportersPipe +="      end\n\n";
+
         return name;
     }
     private static String addReceivers(String pipeName, JsonNode receivers) throws IOException {
         String name = "receivers_" + pipeName;
-        bw.write("      subgraph " + name+"\n");
-        bw.write("      direction LR\n");
-        String p0 = null;String p1 = null;String p2 = null;
-        String connections="";
+        receiversPipe ="";
+        receiversPipe+="      subgraph " + name+"\n";
+        receiversPipe+="      direction LR\n";
+        String textOnLink = null;String nodeA = null;String nodeB = null;
         for (JsonNode receiver : receivers) {
 
-            System.out.println("---" + receiver.asText());
-            p0 = receiver.asText();
-            p1 = getFormatted(pipeName, receiver);
-            p2 = getFormatted(pipeName, receiver);
+            textOnLink = receiver.asText();
+            nodeA = newNodeId(receiver);
+            nodeB = newNodeId(receiver);
 
-            bw.write("          "+p2+"\n");
+
+            receiverNodes+="          "+formatNode(pipeName, nodeA)+"\n";
+            receiversPipe+="          "+formatNode(pipeName, nodeB)+"\n";
 
             //otlp0((T)):::tclass -->|oltp| otlp1 would be written outside end
-            connections += p1 + "-->|" + p0 + "|" + p2+"\n";
-            connections += "        linkStyle "+ cseq++ + getFormatted(pipeName);
+            addLink(nodeA, nodeB, textOnLink, pipeName);
 
         }
         // to end subgraph
-        bw.write("      end\n");
-        bw.write("      "+connections);
+        receiversPipe+="      end\n\n";
 
         return name;
     }
 
-    private static String getFormatted(String pipeName) {
-        if (pipeName.matches("traces")){
-            return " stroke:orange,stroke-width:3px\n";
-        }
-        return " stroke:blue,stroke-width:3px\n";
+    private static void addLink(String nodeA, String nodeB, String textOnLink, String name) {
+        links += nodeA + "-->" + formatTextOnLink(textOnLink) + nodeB + "\n";
+        links += formatLink(name)+"\n";
+        linkSequence++;
     }
 
-    private static String getFormatted(String pipeName, JsonNode jsonNode) {
-        if (pipeName.matches("traces")){
-            return jsonNode.asText() + seq++ + "((T)):::tclass";
-        }
-        return jsonNode.asText() + seq++ + "((M)):::mclass";
+    private static String formatTextOnLink(String textOnLink) {
+        if (textOnLink==null) return "";
+        return "|" + textOnLink + "|";
     }
 
 
@@ -153,9 +183,10 @@ public class OtelcolVisualizer {
         File file = new File("kubernetes/opentelemetry/otel-collector.yaml");
         JsonNode config = mapper.readTree(file);
         config = config.findValue("config.yaml");
+
+        // read data section which is yaml inside yaml
         System.out.println(" config yaml section " + config.toString());
-        config = mapper.readTree(config.asText());
-        pipelines = config.findValue("pipelines");
-        System.out.println(" pipelines yaml section " + pipelines.toString());
+        collectoryConfig = mapper.readTree(config.asText());
+
     }
 }

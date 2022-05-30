@@ -78,23 +78,23 @@ direction LR
 end
 subgraph exporterNodes[" "]
 direction LR
-          subgraph otlp4_sg[tempo-eu-west-0.grafana.net:443]
-          direction LR
+          subgraph otlp4_sg[ ]
+          otlp4_ep(tempo-eu-west-0.grafana.net:443)
           otlp4((T)):::tclass
          end
 
-          subgraph prometheus8_sg[0.0.0.0:8889]
-          direction LR
+          subgraph prometheus8_sg[ ]
+          prometheus8_ep(0.0.0.0:8889)
           prometheus8((M)):::mclass
          end
 
-          subgraph prometheusremotewrite14_sg[$AWS_AMP_ENDPOINT]
-          direction LR
+          subgraph prometheusremotewrite14_sg[ ]
+          prometheusremotewrite14_ep($AWS_AMP_ENDPOINT)
           prometheusremotewrite14((M)):::mclass
          end
 
-          subgraph prometheusremotewrite/grafanacloud16_sg[https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push]
-          direction LR
+          subgraph prometheusremotewrite/grafanacloud16_sg[ ]
+          prometheusremotewrite/grafanacloud16_ep(https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push)
           prometheusremotewrite/grafanacloud16((M)):::mclass
          end
 

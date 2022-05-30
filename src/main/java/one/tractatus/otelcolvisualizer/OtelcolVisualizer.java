@@ -127,8 +127,8 @@ public class OtelcolVisualizer {
             nodeB = newNodeId(exporter);
             String endpoint = collectoryConfig.path("exporters").get(textOnLink).path("endpoint").asText();
             System.out.println(endpoint);
-            exporterNodes+="          subgraph "+nodeA+"_sg["+endpoint+"]\n";
-            exporterNodes+="          direction LR\n";
+            exporterNodes+="          subgraph "+nodeA+"_sg["+" "+"]\n";
+            exporterNodes+="          "+nodeA+"_ep("+endpoint+")\n";
             exporterNodes +="          "+formatNode(pipeName, nodeA)+"\n";
             exporterNodes +="         end\n\n";
 

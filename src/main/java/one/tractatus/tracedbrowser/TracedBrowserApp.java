@@ -42,14 +42,12 @@ public class TracedBrowserApp {
 
 		return IOUtils.toByteArray(in);
 	}
-	@GetMapping(
-			value = "/appgw.json",
-			produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
-	)
-	public @ResponseBody byte[] getAppGwJson() throws IOException {
-		InputStream in = getClass()
-				.getResourceAsStream("/appgw.json");
-		return IOUtils.toByteArray(in);
+	@GetMapping(			value = "/appgw.json"	)
+	public @ResponseBody byte[] getAppGwJson() {
+		String status = "{\"tracing\":" +
+				TracedWindow.getTracingStatus()+
+				"}";
+		return status.getBytes();
 	}
 
 	@RequestMapping("/start")

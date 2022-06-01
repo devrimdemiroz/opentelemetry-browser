@@ -68,6 +68,7 @@ public class Cdp {
     public static void stopIntercepting() {
         log.info("stopIntercepting");
         networkInterceptor.close();
+        chromeDriver.close();
     }
 
     private static Filter headerFilter() {

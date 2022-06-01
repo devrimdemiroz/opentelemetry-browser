@@ -8,6 +8,7 @@ classDef blueclass fill:blue,stroke:blue,stroke-width:2px,color:#fff
 classDef greenclass fill:green,stroke:green,stroke-width:2px,color:#fff
 classDef orangeclass fill:orange,stroke:orange,stroke-width:2px,color:#fff
 classDef redclass fill:red,stroke:red,stroke-width:2px,color:#fff
+
 subgraph Actions
 direction LR
 
@@ -17,7 +18,7 @@ direction LR
     end
     
     subgraph interceptsg[" "]
-    interception[/interception/] o--o
+    interception[/interception/]:::activeColorClass o--o
     tracingstatus[["{{tracing.status}}"]]
     end
     
@@ -48,7 +49,7 @@ otelcol o-.-o otelcoldesc
 
 
 
-click start "/start";
+click start "/start" _blank;
 click stop "/stop";
 click quit "/quit";
 click otelcol "/#/GeneratedDiagram.md" _blank;

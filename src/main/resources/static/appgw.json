@@ -1,6 +1,1 @@
-{
-  "tracing":{
-    "status": "No Active Tracing"
-  }
-
-}
+{"tracing":{"status":"Started"}}

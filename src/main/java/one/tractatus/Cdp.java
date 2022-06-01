@@ -7,7 +7,12 @@ import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 import io.opentelemetry.context.propagation.TextMapSetter;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.devtools.NetworkInterceptor;
 import org.openqa.selenium.remote.http.Filter;
 import org.openqa.selenium.remote.http.HttpRequest;
@@ -34,11 +39,25 @@ public class Cdp {
 
     public static void initDriver() {
         WebDriverManager.chromedriver().setup();
-        chromeDriver = new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        //options.addArguments("window-size=750,450");
+        chromeDriver = new ChromeDriver(options);
+        halfSize();
+    }
 
+    private static int halfSize() {
+        WebDriver.Window browserWindow = chromeDriver.manage().window();
+        browserWindow.maximize();
+        Dimension dim = browserWindow.getSize();
+        Dimension halfwidth = new Dimension(dim.getWidth() / 2, dim.getHeight() );
+        browserWindow.setSize(halfwidth);
+        return browserWindow.getSize().getWidth();
     }
 
     public static void startIntercepting() {
+        chromeDriver.switchTo().newWindow(WindowType.WINDOW);
+        int positionX = halfSize();
+        chromeDriver.manage().window().setPosition(new Point(positionX,0));
         log.info("startIntercepting");
         networkInterceptor = new NetworkInterceptor(
                 chromeDriver,

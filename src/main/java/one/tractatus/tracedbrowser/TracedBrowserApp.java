@@ -2,7 +2,6 @@ package one.tractatus.tracedbrowser;
 
 import one.tractatus.Cdp;
 import io.opentelemetry.api.trace.Span;
-import one.tractatus.ParseMarkdownToHtml;
 import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -10,16 +9,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 @SpringBootApplication
-@RestController
+@Controller
 public class TracedBrowserApp {
 
 	public static ConfigurableApplicationContext ctx;
@@ -30,7 +29,7 @@ public class TracedBrowserApp {
 	public static void main(String[] args) throws InterruptedException {
 
 		ctx=SpringApplication.run(TracedBrowserApp.class, args);
-		TracedBrowser.awake();
+		TracedWindow.awake();
 
 	}
 	@GetMapping(
@@ -44,20 +43,18 @@ public class TracedBrowserApp {
 		return IOUtils.toByteArray(in);
 	}
 
-	@GetMapping("/start")
+	@RequestMapping("/start")
 	public String start() {
-		Span span=TracedBrowser.start();
+		Span span= TracedWindow.start();
+		return "redirect:/#/";
 
-		return "Navigate to your adress for example https://devrimdemiroz.github.io/\n" +
-				"\n" +
-				"<--- Return back to original tab and click stop when don";
 	}
+
 
 	@GetMapping("/stop")
 	public String stop() {
-		TracedBrowser.stop();
-
-		return "STOPPED";
+		TracedWindow.stop();
+		return "redirect:/#/";
 
 	}
 

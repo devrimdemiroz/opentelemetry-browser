@@ -46,7 +46,9 @@ stop o-.-o stopdesc
 quit o-.-o quitdesc
 otelcol o-.-o otelcoldesc
 
-click start "/start" _blank;
+
+
+click start "/start";
 click stop "/stop";
 click quit "/quit";
 click otelcol "/#/GeneratedDiagram.md" _blank;

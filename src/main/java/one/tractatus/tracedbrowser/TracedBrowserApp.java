@@ -39,7 +39,16 @@ public class TracedBrowserApp {
 	public @ResponseBody byte[] getApplicationJson() throws IOException {
 		InputStream in = getClass()
 				.getResourceAsStream("/application.json");
-		System.out.println("application.json");
+
+		return IOUtils.toByteArray(in);
+	}
+	@GetMapping(
+			value = "/appgw.json",
+			produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
+	)
+	public @ResponseBody byte[] getAppGwJson() throws IOException {
+		InputStream in = getClass()
+				.getResourceAsStream("/appgw.json");
 		return IOUtils.toByteArray(in);
 	}
 

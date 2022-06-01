@@ -39,9 +39,10 @@ public class Cdp {
 
     public static void initDriver() {
         WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
+
+        //ChromeOptions options = new ChromeOptions();
         //options.addArguments("window-size=750,450");
-        chromeDriver = new ChromeDriver(options);
+        chromeDriver = new ChromeDriver();
         halfSize();
     }
 

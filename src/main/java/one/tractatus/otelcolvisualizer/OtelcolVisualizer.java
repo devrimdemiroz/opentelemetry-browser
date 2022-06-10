@@ -1,10 +1,15 @@
 package one.tractatus.otelcolvisualizer;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import java.io.*;
 import java.util.Iterator;
+import java.util.List;
+
 import static one.tractatus.otelcolvisualizer.MermaidFormatter.*;
 
 public class OtelcolVisualizer {
@@ -22,7 +27,13 @@ public class OtelcolVisualizer {
     private static String pipes;
 
     public static void main(String[] args) throws IOException {
-        readConfig();
+        String configFile;
+        configFile = "kubernetes/opentelemetry/otel-collector.yaml";
+        if (args !=null ){
+            configFile = args[0];
+        }
+        System.out.println("Reading configfile="+configFile);
+        readConfig(configFile);
         generateDiagram();
     }
 
@@ -180,11 +191,12 @@ public class OtelcolVisualizer {
     }
 
 
-    private static void readConfig() throws IOException {
+    private static void readConfig(String configFile) throws IOException {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        File file = new File("kubernetes/opentelemetry/otel-collector.yaml");
+        File file = new File(configFile);
         JsonNode config = mapper.readTree(file);
-        config = config.findValue("config.yaml");
+        config = config.findValue("config");
+
 
         // read data section which is yaml inside yaml
         System.out.println(" config yaml section " + config.toString());

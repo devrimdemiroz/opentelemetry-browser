@@ -18,7 +18,7 @@ direction LR
     end
     
     subgraph interceptsg[" "]
-    interception[/interception/]:::activeColorClass o--o
+    interception[/interception/] o--o
     tracingstatus[["{{tracing.status}}"]]
     end
     

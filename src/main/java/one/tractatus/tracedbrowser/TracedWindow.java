@@ -28,7 +28,7 @@ public class TracedWindow {
         Cdp.startIntercepting();
         updateStatus("Started");
 
-        Span span= Tracing.createRootSpan("session");
+        Span span= Tracing.createRootSpan("sessionX");
         try (Scope unused = span.makeCurrent()) {
             log.info("interception started");
         } catch (Exception e) {
@@ -45,15 +45,15 @@ public class TracedWindow {
 
 
     public static void stop() {
-        Tracing.endRootSpan();
         Cdp.stopIntercepting();
+        Tracing.endRootSpan();
         updateStatus("Stopped");
 
     }
 
     public static String getTracingStatus() {
-        String json="{\"status\":\""+tracingStatus+"\"},"
-                +"{\"color\":\""+statusColor+"\"}";
+        String json="{\"status\":\""+tracingStatus+"\"}";
+
         return json;
     }
 }

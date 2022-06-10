@@ -39,7 +39,7 @@ public class Tracing {
 
 
     public static boolean endRootSpan() {
-
+        log.info("stopping root span=" + rootSpan.toString());
         if (rootSpan != null) {
             log.debug("endRootSpan="+rootSpan.toString());
             rootSpan.end();
